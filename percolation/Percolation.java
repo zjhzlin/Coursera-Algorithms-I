@@ -29,9 +29,9 @@ public class Percolation {
             grid.union(0, i);
         }
         // last n's parent is the virtual node n*n+1
-        for (int i = n * n - n + 1; i <= n * n; i++) {
-            grid.union(n * n + 1, i);
-        }
+        // for (int i = n * n - n + 1; i <= n * n; i++) {
+        //     grid.union(n * n + 1, i);
+        // }
 
     }
 
@@ -61,10 +61,12 @@ public class Percolation {
             else if (row == rows && col == 1) { // lower left corner
                 connectIfOpen(index, row, col + 1);
                 connectIfOpen(index, row - 1, col);
+                grid.union(rows * cols + 1, index);
             }
             else if (row == rows && col == cols) {  // lower right corner
                 connectIfOpen(index, row, col - 1);
                 connectIfOpen(index, row - 1, col);
+                grid.union(rows * cols + 1, index);
             }
             else if (row == 1) {    // other members in the first row
                 connectIfOpen(index, row, col + 1);
@@ -85,6 +87,7 @@ public class Percolation {
                 connectIfOpen(index, row - 1, col);
                 connectIfOpen(index, row, col + 1);
                 connectIfOpen(index, row, col - 1);
+                grid.union(rows * cols + 1, index);
             }
             else {
                 connectIfOpen(index, row - 1, col);
