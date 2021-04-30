@@ -62,8 +62,8 @@ public class PercolationVisualizer {
     }
 
     public static void main(String[] args) {
-        //In in = new In(args[0]);      // input file
-        In in = new In("input20.txt");      // input file
+        // In in = new In(args[0]);      // input file
+        In in = new In("input8.txt");      // input file
         int n = in.readInt();         // n-by-n percolation system
 
         // turn on animation mode
@@ -74,16 +74,16 @@ public class PercolationVisualizer {
         draw(perc, n);
         StdDraw.show();
         StdDraw.pause(DELAY);
-        int numSites = 231;
-        int num = 0;
-        while (!in.isEmpty() && num < numSites) {
+        //int numSites = 231;
+        //int num = 0;
+        while (!in.isEmpty()) {
             int i = in.readInt();
             int j = in.readInt();
             perc.open(i, j);
             draw(perc, n);
             StdDraw.show();
             StdDraw.pause(DELAY);
-            num+=1;
+            //num+=1;
         }
     }
 }

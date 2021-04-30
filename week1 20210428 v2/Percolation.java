@@ -140,12 +140,11 @@ public class Percolation {
         if (rows == 1) {
             return isOpen(1, 1);
         }
-        // check last row, if there is a isFull -> time consuming
+        // check last row, if there is a isFull
         boolean flag = false;
         for (int i = 1; i <= cols; i++) {
             if (isFull(rows, i)) {
                 flag = true;
-                break;
             }
         }
         return flag;
