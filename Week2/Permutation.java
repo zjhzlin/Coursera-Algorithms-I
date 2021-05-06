@@ -18,10 +18,9 @@ public class Permutation {
 
     public static void main(String[] args) {
         int k = Integer.parseInt(args[0]);
-        // int k = 8;
-        String strings = StdIn.readString();
-        // String strings = "AA BB BB BB BB BB CC CC CC";
-        // String[] s = strings.split(" ");
+        // int k = 3;
+        String strings = StdIn.readString(args[1]);
+        // String strings = "AA BB BB BB BB BB CC CC";
         RandomizedQueue<String> ranQue = new RandomizedQueue<>();
 
         int start = 0;

@@ -4,8 +4,6 @@
  *  Last modified:     1/1/2019
  **************************************************************************** */
 
-import edu.princeton.cs.algs4.StdIn;
-
 public class Permutation {
 
     // get the first string before space
@@ -17,11 +15,10 @@ public class Permutation {
     }
 
     public static void main(String[] args) {
-        int k = Integer.parseInt(args[0]);
-        // int k = 8;
-        String strings = StdIn.readString();
-        // String strings = "AA BB BB BB BB BB CC CC CC";
-        // String[] s = strings.split(" ");
+         // int k = Integer.parseInt(args[0]);
+        int k = 3;
+        // String strings = StdIn.readString();
+        String strings = "A B C D E F G H I";
         RandomizedQueue<String> ranQue = new RandomizedQueue<>();
 
         int start = 0;

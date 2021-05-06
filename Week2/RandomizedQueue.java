@@ -32,6 +32,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // add the item
     public void enqueue(Item item) {
+        if (item == null) throw new NullPointerException("item is null");
         if (size == s.length) resize(2 * s.length);  // if array is full, create a new array twice the length
         s[size++] = item;
     }
@@ -47,7 +48,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // remove and return a random item
     public Item dequeue() {
-        if (isEmpty()) throw new NullPointerException("No item left");
+        if (isEmpty()) throw new NoSuchElementException("No item left");
         int ranNum = StdRandom.uniform(size);  // random int number [0,size)
         Item item = s[ranNum];
         // put all the items after ranNum 1 forward
@@ -66,6 +67,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // return a random item (but do not remove it)
     public Item sample() {
+        if (isEmpty()) throw new NoSuchElementException("No item left");
         int ranNum = StdRandom.uniform(size);
         Item result = s[ranNum];
         return result;
