@@ -11,7 +11,7 @@ public class Permutation {
     // get the first string before space
 
     private static int getNextIndex(String string) {
-        int index = string.indexOf(" ");
+        int index = string.indexOf(' ');
         // String result = string.substring(0, index);
         return index + 1;
     }
@@ -24,22 +24,14 @@ public class Permutation {
         // String[] s = strings.split(" ");
         RandomizedQueue<String> ranQue = new RandomizedQueue<>();
 
-        //System.out.println(getString(strings));
         int start = 0;
         int nextSpaceIndex = getNextIndex(strings);
-        while ( nextSpaceIndex!= 0) {
+        while (nextSpaceIndex != 0) {
             String next = strings.substring(start, nextSpaceIndex-1);
             ranQue.enqueue(next);
-            System.out.println(next);
             strings = strings.substring(nextSpaceIndex);
-            System.out.println(strings);
             nextSpaceIndex = getNextIndex(strings);
-            System.out.println(nextSpaceIndex);
-
         }
-
-        // ranQue.enqueue(getString(strings));
-
         for (int i = 0; i < k; i++) {
             System.out.println(ranQue.dequeue());
         }
