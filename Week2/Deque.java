@@ -3,7 +3,7 @@
  *  Coursera User ID:
  *  Last modified:     30/04/2021 08:55 - 09:53
  *                     1/5/2021 09:17
- *                     2/5/2021 08:40
+ *                     2/5/2021 08:40 - 08:59 use double linked list
  **************************************************************************** */
 
 import java.util.Iterator;
@@ -50,12 +50,6 @@ public class Deque<Item> implements Iterable<Item> {
             last = first;
             first.next = null;
         }
-        // else if (size == 1) {
-        //     last = oldFirst;
-        //     first.next = last;
-        //     last.prev = first;
-        //     last.next = null;
-        // }
         else {
             first.next = oldFirst;
             oldFirst.prev = first;
@@ -78,9 +72,6 @@ public class Deque<Item> implements Iterable<Item> {
             first = last;
             last.prev = null;
         }
-        // else if (size == 1) {
-        //
-        // }
         else {
             oldLast.next = last;
             last.prev = oldLast;
@@ -129,7 +120,7 @@ public class Deque<Item> implements Iterable<Item> {
         return new ListIterator();
     }
 
-    private class ListIterator implements Iterator <Item> {
+    private class ListIterator implements Iterator<Item> {
 
         private Node current = first;
 

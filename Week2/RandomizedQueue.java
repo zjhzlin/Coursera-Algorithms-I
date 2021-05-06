@@ -1,7 +1,8 @@
 /* *****************************************************************************
  *  Name:              Lynn Zhang
  *  Coursera User ID:
- *  Last modified:     2/5/2021 09:00 - 09:38
+ *  Last modified:     4/5/2021 08:48 - 09:50
+ *                     6/5/2021 07:55
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.StdRandom;
@@ -10,24 +11,18 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
-
-    private Node first;
-    private int size;
-
-    private class Node {
-        Item item;
-        Node next;
-    }
+    private Item[] s;
+    private int size = 0;
+    private int capacity = 10; // need to resize -> capacity
 
     // construct an empty randomized queue
     public RandomizedQueue() {
-        first = null;
-        size = 0;
+        s = (Item[]) new Object[capacity];  // using cast for general array creation; cast not recommended
     }
 
     // is the randomized queue empty?
     public boolean isEmpty() {
-        return first == null;
+        return size == 0;
     }
 
     // return the number of items on the randomized queue
@@ -36,83 +31,70 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     // add the item
-    // add from the first
     public void enqueue(Item item) {
-        if (item == null) {
-            throw new IllegalArgumentException("item is null");
+        if (size == s.length) resize(2 * s.length);  // if array is full, create a new array twice the length
+        s[size++] = item;
+    }
+
+    private void resize(int c) {
+        Item[] copy = (Item[]) new Object[c];
+        for (int i = 0; i < size; i++) {
+            copy[i] = s[i];
         }
-        Node oldFirst = first;  // corner case; first = null
-        first = new Node();
-        first.item = item;
-        first.next = oldFirst;
-        size += 1;
+        s = copy;
+        this.capacity = s.length;
     }
 
     // remove and return a random item
     public Item dequeue() {
-        if (isEmpty()) {
-            throw new NoSuchElementException("Queue is empty");
-        }
-        int randomNum = StdRandom.uniform(size);  // return a random integer uniformly in [0, n)
-        Node current = first;
-        Node prev = null;
-        for (int i = 0; i < randomNum; i++) {
-            prev = current;
-            current = current.next;
-            if (i == randomNum - 1) {
-                // delete this current one
-                prev.next = current.next;
-            }
-        }
-        if (randomNum == 0) {  // delete the first node, note if first is the only node
-            if (size == 1) {
-                first = null;
+        if (isEmpty()) throw new NullPointerException("No item left");
+        int ranNum = StdRandom.uniform(size);  // random int number [0,size)
+        Item item = s[ranNum];
+        // put all the items after ranNum 1 forward
+        for (int i = ranNum; i < size; i++) {
+            if (i + 1 < capacity) {
+                s[i] = s[i + 1];
             }
             else {
-                first = first.next;
+                s[i] = null;
             }
         }
         size -= 1;
-        return current.item;
+        if (size > 0 && size == s.length/4) resize(s.length/2);  // halve array when array is one quarter full
+        return item;
     }
 
     // return a random item (but do not remove it)
     public Item sample() {
-        if (isEmpty()) {
-            throw new NoSuchElementException("Queue is empty");
-        }
-        int randomNum = StdRandom.uniform(size);  // return a random integer uniformly in [0, n)
-        Node current = first;
-        for (int i = 0; i < randomNum; i++) {
-            current = current.next;
-        }
-        return current.item;
+        int ranNum = StdRandom.uniform(size);
+        Item result = s[ranNum];
+        return result;
     }
 
     // return an independent iterator over items in random order
     public Iterator<Item> iterator() {
-        return new ListIterator();
+        return new ArrayIterator();
     }
 
+    private class ArrayIterator implements Iterator<Item> {
 
-    private class ListIterator implements Iterator <Item> {
-
-        private Node current = first;
+        private int i = 0;
+        private final int[] permutation = StdRandom.permutation(size);  // a uniformly random permutation of n elements.
 
         public boolean hasNext() {
-            if (current == null) {
+            if (i >= capacity) {
                 return false;
             }
-            return current != null;
+            return s[i] != null;
         }
 
         public Item next() {
             if (!hasNext()) {
                 throw new NoSuchElementException("No more next items");
             }
-
-            Item item = current.item;
-            current = current.next;
+            int index = permutation[i];
+            Item item = s[index];
+            i++;
             return item;
         }
 
@@ -121,18 +103,31 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
     }
 
+
+    // unit testing (required)
     public static void main(String[] args) {
         RandomizedQueue<Integer> ranQue = new RandomizedQueue<>();
         ranQue.enqueue(1);
         ranQue.enqueue(2);
         ranQue.enqueue(3);
-        System.out.println("Random Queue size is: " + ranQue.size());
-        System.out.println("dequeue is: " + ranQue.dequeue());
-        // System.out.println("dequeue is: " + ranQue.dequeue());
-        // System.out.println("sample is: " + ranQue.sample());
+        ranQue.enqueue(4);
 
-        for (int i: ranQue) {
-            System.out.println("iterate: " +  i);
+        System.out.println(ranQue.size);
+        System.out.println("Sample is " + ranQue.sample());
+        System.out.println(ranQue.sample());
+        System.out.println(ranQue.sample());
+
+        for (int queue: ranQue) {
+            System.out.println("Iterable: " + queue);
+        }
+
+        System.out.println("Dequeue: " + ranQue.dequeue());
+        System.out.println("Dequeue: " + ranQue.dequeue());
+        System.out.println("Dequeue: " + ranQue.dequeue());
+
+
+        for (int queue: ranQue) {
+            System.out.println("Iterable: " + queue);
         }
 
     }
