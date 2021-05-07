@@ -23,7 +23,7 @@ public class Percolation {
         this.rows = n;
         this.cols = n;
         this.grid = new WeightedQuickUnionUF(n*n+2);  // 2 extra is the virtual nodes
-        this.gridData = new boolean[n][n];
+        this.gridData = new boolean[n][n]; // open or block
         // first n is the virtual node 0
         for (int i = 1; i <= n; i++) {
             grid.union(0, i);
