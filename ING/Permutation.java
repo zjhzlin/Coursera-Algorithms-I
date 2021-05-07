@@ -1,7 +1,7 @@
 /* *****************************************************************************
- *  Name:              Alan Turing
- *  Coursera User ID:  123456
- *  Last modified:     1/1/2019
+ *  Name:              Lynn Zhang
+ *  Coursera User ID:
+ *  Last modified:     2021-05-07
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.StdIn;
