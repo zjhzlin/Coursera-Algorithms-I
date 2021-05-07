@@ -3,6 +3,7 @@
  *  Coursera User ID:
  *  Last modified:     4/5/2021 08:48 - 09:50
  *                     6/5/2021 07:55
+ *                     7/5/2021 06:29 
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.StdRandom;
@@ -32,7 +33,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // add the item
     public void enqueue(Item item) {
-        if (item == null) throw new NullPointerException("item is null");
+        if (item == null) throw new IllegalArgumentException("item is null");
         if (size == s.length) resize(2 * s.length);  // if array is full, create a new array twice the length
         s[size++] = item;
     }
