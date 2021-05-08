@@ -11,11 +11,14 @@
 /* *****************************************************************************
  *  Name:              Lynn Zhang
  *  Coursera User ID:
- *  Last modified:     2021-05-07 - 09:12 - 09:30 
+ *  Last modified:     2021-05-07 - 09:12 - 09:30
+ *                                  22:39 - 23:00
+ *                     2021-05-08 07:34 - 
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.StdDraw;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 public class Point implements Comparable<Point> {
@@ -152,7 +155,10 @@ public class Point implements Comparable<Point> {
 
         p1.drawTo(p2);
         p1.drawTo(p3);
-
+        Point[] points = {p3, p2, p1};
+        Comparator<Point> sO = p1.slopeOrder();
+        Arrays.sort(points, sO);
+        for (Point p: points) System.out.println(p);
 
     }
 }
