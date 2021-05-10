@@ -13,7 +13,7 @@
  *  Coursera User ID:
  *  Last modified:     2021-05-07 - 09:12 - 09:30
  *                                  22:39 - 23:00
- *                     2021-05-08 07:34 - 
+ *                     2021-05-08 07:34 - 08:15
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.StdDraw;
@@ -72,7 +72,7 @@ public class Point implements Comparable<Point> {
         /* YOUR CODE HERE */
         if (this.x == that.x && this.y == that.y) return Double.NEGATIVE_INFINITY;
         if (this.x == that.x) return Double.POSITIVE_INFINITY;
-        double slope = (that.y - this.y) / (that.x - this.x);
+        double slope = (double) (that.y - this.y) / (double) (that.x - this.x);
         return slope;
     }
 
@@ -96,9 +96,10 @@ public class Point implements Comparable<Point> {
         if (this.y < that.y) return -1;
         else if (this.y > that.y)   return 1;
         else {
-            if (this.x < that.x) return -1;
-            else if (this.x > that.x) return 1;
-            else return 0;
+            return Integer.compare(this.x, that.x);
+            // if (this.x < that.x) return -1;
+            // else if (this.x > that.x) return 1;
+            // else return 0;
         }
     }
 
@@ -110,21 +111,8 @@ public class Point implements Comparable<Point> {
      */
     public Comparator<Point> slopeOrder() {
         /* YOUR CODE HERE */
-        Comparator<Point> BY_SLOPE = new BySlope();
-        return BY_SLOPE;
+       return  (Point p1, Point p2) -> Double.compare(this.slopeTo(p1), this.slopeTo(p2));
     }
-
-    private class BySlope implements Comparator<Point> {
-
-        // private final Point p0 = new Point(x, y);
-
-        public int compare(Point p1, Point p2) {
-            if (Point.this.slopeTo(p1) < Point.this.slopeTo(p2)) return -1;
-            else if (Point.this.slopeTo(p1) > Point.this.slopeTo(p2)) return 1;
-            else return 0;
-        }
-    }
-
 
     /**
      * Returns a string representation of this point.
@@ -149,15 +137,23 @@ public class Point implements Comparable<Point> {
         Point p1 = new Point(2,2);
         Point p2 = new Point(3, 3);
         Point p3 = new Point (4,5);
+        Point p4 = new Point(3,4);
         p1.draw();
         p2.draw();
         p3.draw();
+        p4.draw();
 
         p1.drawTo(p2);
         p1.drawTo(p3);
-        Point[] points = {p3, p2, p1};
-        Comparator<Point> sO = p1.slopeOrder();
-        Arrays.sort(points, sO);
+        p1.drawTo(p4);
+
+        System.out.println("p2 slope: " + p1.slopeTo(p2));
+        System.out.println("p3 slope: " + p1.slopeTo(p3));
+
+
+        Point[] points = {p4, p3, p2, p1};
+        Comparator<Point> bySlopeOrder = p1.slopeOrder();
+        Arrays.sort(points, bySlopeOrder);
         for (Point p: points) System.out.println(p);
 
     }
