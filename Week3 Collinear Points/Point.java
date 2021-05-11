@@ -92,7 +92,7 @@ public class Point implements Comparable<Point> {
     public int compareTo(Point that) {
         /* YOUR CODE HERE */
         // exception
-        if (that == null) throw new IllegalArgumentException("Point is null");
+        if (that == null) throw new NullPointerException("Point is null");
 
         if (this.y < that.y) return -1;
         else if (this.y > that.y)   return 1;
@@ -132,13 +132,13 @@ public class Point implements Comparable<Point> {
      */
     public static void main(String[] args) {
         /* YOUR CODE HERE */
-        StdDraw.setXscale(0,6);
-        StdDraw.setYscale(0,6);
+        StdDraw.setXscale(0, 6);
+        StdDraw.setYscale(0, 6);
 
-        Point p1 = new Point(2,2);
+        Point p1 = new Point(2, 2);
         Point p2 = new Point(3, 3);
-        Point p3 = new Point (4,5);
-        Point p4 = new Point(3,4);
+        Point p3 = new Point(4, 5);
+        Point p4 = new Point(3, 4);
         p1.draw();
         p2.draw();
         p3.draw();

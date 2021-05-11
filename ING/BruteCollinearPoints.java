@@ -10,7 +10,9 @@
 ** returning all such line segments.
 */
 
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
 
 import java.util.Arrays;
 
@@ -38,7 +40,8 @@ public class BruteCollinearPoints {
         // any point in the array in null - illegal
         // contains a repeated point - illegal
         int numOfP = points.length;
-        int capacity = numOfP * (numOfP - 1) * (numOfP - 2) * (numOfP - 3);
+        int capacity = numOfP * (numOfP - 1) / 3;
+
         LineSegment[] lineSegments = new LineSegment[capacity];
 
         for (int i = 0; i < points.length; i++) {
@@ -71,26 +74,54 @@ public class BruteCollinearPoints {
             }
         }
 
-        return lineSegments;
+        return Arrays.copyOfRange(lineSegments, 0, numLineSegments);
     }
 
     public static void main(String[] args) {
-        StdDraw.setXscale(0, 6);
-        StdDraw.setYscale(0,6);
+        // StdDraw.setXscale(0, 6);
+        // StdDraw.setYscale(0, 6);
+        //
+        // Point p1 = new Point(2, 2);
+        // Point p2 = new Point(3, 3);
+        // Point p3 = new Point(4, 4);
+        // Point p4 = new Point(5, 5);
+        // p1.draw();
+        // p2.draw();
+        // p3.draw();
+        // p4.draw();
+        // Point[] points = {p4, p3, p2, p1};
+        //
+        // BruteCollinearPoints bcp = new BruteCollinearPoints(points);
+        // bcp.segments();
+        // System.out.print(bcp.numberOfSegments());
 
-        Point p1 = new Point(2,2);
-        Point p2 = new Point(3, 3);
-        Point p3 = new Point (4,4);
-        Point p4 = new Point(5,5);
-        p1.draw();
-        p2.draw();
-        p3.draw();
-        p4.draw();
-        Point[] points = {p4, p3, p2, p1};
+        In in = new In("/collinear/equidistant.txt");      // input file
+        int n = in.readInt();
+        Point[] points = new Point[n];
+        for (int i = 0; i < n; i++) {
+            int x = in.readInt();
+            int y = in.readInt();
+            points[i] = new Point(x, y);
+        }
 
-        BruteCollinearPoints bcp = new BruteCollinearPoints(points);
-        bcp.segments();
-        System.out.print(bcp.numberOfSegments());
+        // draw the points
+        StdDraw.enableDoubleBuffering();
+        StdDraw.setXscale(0, 32768);
+        StdDraw.setYscale(0, 32768);
+        for (Point p : points) {
+            p.draw();
+        }
+        StdDraw.show();
+
+        // print and draw the line segments
+        BruteCollinearPoints collinear = new BruteCollinearPoints(points);
+        for (LineSegment segment : collinear.segments()) {
+            StdOut.println(segment);
+            segment.draw();
+        }
+        System.out.println("in total: " + collinear.numberOfSegments() + " collinear");
+        StdDraw.show();
+
 
     }
 }

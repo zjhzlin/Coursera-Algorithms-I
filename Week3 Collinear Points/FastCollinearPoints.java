@@ -2,7 +2,7 @@
 /* *****************************************************************************
  *  Name:              Lynn Zhang
  *  Coursera User ID:
- *  Last modified:    2021-05-10 07:40 - 08:47
+ *  Last modified:    2021-05-10 07:40 - 09:26
  **************************************************************************** */
 
 /*
@@ -14,7 +14,9 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 
 public class FastCollinearPoints {
@@ -26,6 +28,14 @@ public class FastCollinearPoints {
     public FastCollinearPoints(Point[] points) {
         if (points == null) throw new IllegalArgumentException("Input is null");
         this.points = Arrays.copyOf(points, points.length);
+        Arrays.sort(this.points);
+        Point prevP = null;
+        for (Point p: this.points) {
+            if (p == null) throw new IllegalArgumentException("point is null");
+            if (p.equals(prevP)) throw new IllegalArgumentException("duplicates");
+            prevP = p;
+        }
+
     }
 
     // the number of line segments
@@ -39,22 +49,28 @@ public class FastCollinearPoints {
     public LineSegment[] segments() {
 
         int numOfP = points.length;
-        int capacity = numOfP * (numOfP - 1) * (numOfP - 2) * (numOfP - 3);
+        // int capacity = numOfP * (numOfP - 1) * (numOfP - 2) * (numOfP - 3);
+        // int capacity = numOfP / 4;
+        int capacity = numOfP * (numOfP - 1) / 3;
+
         LineSegment[] lineSegments = new LineSegment[capacity];
-        Point[] pointsCopy = Arrays.copyOf(points, points.length);
+        Point[] pointsCopy = Arrays.copyOf(points, numOfP);
+        ArrayList<Point> pointsCollinear = new ArrayList<>();
         // loop in the n points
         for (Point p: points) {
             if (p == null) throw new IllegalArgumentException("p is null");
+            // if p already found in collinear, no need to find it again
+            if (pointsCollinear.contains(p)) continue;
             // given a point p, use this as origin
             // sort the array according to the slope order to p
             Comparator<Point> bySlopeOrder = p.slopeOrder();
             Arrays.sort(pointsCopy, bySlopeOrder);  // p is always the first
             // for each other point in this array, calculate its slope to the origin
-            Double[] slopes = new Double[points.length];
+            Double[] slopes = new Double[numOfP];
             int i = 0;
             for (Point q: pointsCopy) {
                 if (q == null) throw new IllegalArgumentException("q is null");
-                Double slope = p.slopeTo(q);
+                double slope = p.slopeTo(q);
                 if (i > 0 && slope == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException("duplicate");  // if there is another point with same x and same y as p -> duplicates
                 slopes[i++] = slope;
             }
@@ -62,6 +78,7 @@ public class FastCollinearPoints {
             int countSameSlope = 0;
             int startIndex = 0;
             for (int m = 0; m < slopes.length; m++) {
+                if (countSameSlope >= 2) break;
                 for (int n = m + 1; n < slopes.length; n++) {
                     if (!slopes[m].equals(slopes[n]) && countSameSlope >= 2) {
                         startIndex = m;
@@ -74,12 +91,21 @@ public class FastCollinearPoints {
             }
             // If so, these points, together with p, are collinear
             if (countSameSlope >= 2) {
-                LineSegment lineSeg = new LineSegment(p, pointsCopy[startIndex + countSameSlope]);
+                Point[] pointsCovered = Arrays.copyOfRange(pointsCopy, startIndex, startIndex + countSameSlope + 1);
+                Point[] pointsOnLine = new Point[pointsCovered.length + 1];
+                for (int index = 0; index < pointsCovered.length; index++) {
+                    pointsOnLine[index] = pointsCovered[index];
+                }
+                pointsOnLine[pointsOnLine.length-1] = p;
+                Arrays.sort(pointsOnLine);
+                LineSegment lineSeg = new LineSegment(pointsOnLine[0], pointsOnLine[pointsOnLine.length-1]);
                 lineSegments[numOfSegments++] = lineSeg;
+                // if these points are already collinear, then next loop, no need to look for its collinear points.
+                Collections.addAll(pointsCollinear, pointsCovered);
             }
 
         }
-        return lineSegments;
+        return Arrays.copyOfRange(lineSegments, 0, numOfSegments);
     }
 
 
@@ -101,7 +127,8 @@ public class FastCollinearPoints {
 
 
         // read the n points from a file
-        In in = new In(args[0]);
+        // In in = new In(args[0]);
+        In in = new In("/collinear/input8.txt");      // input file
         int n = in.readInt();
         Point[] points = new Point[n];
         for (int i = 0; i < n; i++) {
@@ -125,6 +152,7 @@ public class FastCollinearPoints {
             StdOut.println(segment);
             segment.draw();
         }
+        System.out.println("in total: " + collinear.numOfSegments + " collinear");
         StdDraw.show();
     }
 }
