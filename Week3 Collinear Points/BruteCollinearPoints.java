@@ -3,12 +3,14 @@
  *  Coursera User ID:  123456
  *  Last modified:     2021-05-09 07:30 - 08:08
  *                     2021-05-10 06:24 - 06:43
+ *                     2021-05-11
+ *                     2021-05-12 06:38
  **************************************************************************** */
 
 /*
-** examines 4 points at a time and checks whether they all lie on the same line segment,
-** returning all such line segments.
-*/
+ ** examines 4 points at a time and checks whether they all lie on the same line segment,
+ ** returning all such line segments.
+ */
 
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
@@ -27,6 +29,15 @@ public class BruteCollinearPoints {
         // corner cases: argument is null
         if (points == null) throw new IllegalArgumentException("Input is null");
         this.points = Arrays.copyOf(points, points.length);
+        Arrays.sort(this.points);
+        // any point in the array in null - illegal
+        // contains a repeated point - illegal
+        Point prevP = null;
+        for (Point p : this.points) {
+            if (p == null) throw new IllegalArgumentException("point is null");
+            if (p.equals(prevP)) throw new IllegalArgumentException("duplicates");
+            prevP = p;
+        }
     }
 
     // the number of line segments
@@ -37,8 +48,6 @@ public class BruteCollinearPoints {
     // the line segments
     // should include each line segment containing 4 points exactly once.
     public LineSegment[] segments() {
-        // any point in the array in null - illegal
-        // contains a repeated point - illegal
         int numOfP = points.length;
         int capacity = numOfP * (numOfP - 1) / 3;
 
@@ -46,26 +55,15 @@ public class BruteCollinearPoints {
 
         for (int i = 0; i < points.length; i++) {
             Point p = points[i];
-            if (p == null) throw new IllegalArgumentException("p point is null");
-            for (int j = i+1; j < points.length; j++) {
+            for (int j = i + 1; j < points.length; j++) {
                 Point q = points[j];
-                if (q.equals(p))
-                    throw new IllegalArgumentException("Duplicate points or q is null");
-                for (int k = j+1; k < points.length; k++) {
+                for (int k = j + 1; k < points.length; k++) {
                     Point r = points[k];
-                    if (r.equals(p) || r.equals(q))
-                        throw new IllegalArgumentException("Duplicate points or r is null");
-                    for (int m = k+1; m < points.length; m++) {
+                    for (int m = k + 1; m < points.length; m++) {
                         Point s = points[m];
-                        if (s.equals(r) || s.equals(q) || s.equals(p)) {
-                            throw new IllegalArgumentException("Duplicate point or s is null");
-                        }
-                        double slopeQ = p.slopeTo(q);
-                        double slopeR = p.slopeTo(r);
-                        double slopeS = p.slopeTo(s);
-                        if (slopeQ == slopeR && slopeR == slopeS) {
+                        if (p.slopeTo(q) == p.slopeTo(r) && p.slopeTo(r) == p.slopeTo(s)) {
                             // they are collinear
-                            Point[] fourP = {p, q, r, s};
+                            Point[] fourP = { p, q, r, s };
                             Arrays.sort(fourP);
                             lineSegments[numLineSegments++] = new LineSegment(fourP[0], fourP[3]);
                         }
@@ -95,7 +93,9 @@ public class BruteCollinearPoints {
         // bcp.segments();
         // System.out.print(bcp.numberOfSegments());
 
-        In in = new In("/collinear/equidistant.txt");      // input file
+        In in = new In(args[0]);
+
+        // In in = new In("/collinear/equidistant.txt");      // input file
         int n = in.readInt();
         Point[] points = new Point[n];
         for (int i = 0; i < n; i++) {

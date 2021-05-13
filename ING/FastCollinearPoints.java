@@ -3,6 +3,7 @@
  *  Name:              Lynn Zhang
  *  Coursera User ID:
  *  Last modified:    2021-05-10 07:40 - 09:26
+ *
  **************************************************************************** */
 
 /*
@@ -127,8 +128,8 @@ public class FastCollinearPoints {
 
 
         // read the n points from a file
-        // In in = new In(args[0]);
-        In in = new In("/collinear/input8.txt");      // input file
+        In in = new In(args[0]);
+        // In in = new In("/collinear/input8.txt");      // input file
         int n = in.readInt();
         Point[] points = new Point[n];
         for (int i = 0; i < n; i++) {
